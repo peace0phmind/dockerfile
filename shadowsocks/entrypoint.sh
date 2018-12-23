@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 SERVER_FLAG=${SERVER_FLAG:-"false"}
 KCP_FLAG=${KCP_FLAG:-"false"}

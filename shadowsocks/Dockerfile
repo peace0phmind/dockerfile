@@ -51,7 +51,6 @@ RUN apk add --no-cache --virtual .build-deps \
     # Runtime dependencies setup
     && apk add --no-cache \
          rng-tools \
-         bash \
          $(scanelf --needed --nobanner /usr/bin/ss-* \
           | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
           | sort -u)
