@@ -5,7 +5,7 @@ socks -> http
 ### usage
 
 ``` sh
-docker run -dt -p8118:8118 --link ssc:ssc buds/privoxy
+docker run -dt -p8118:8118 --link ssc:ssc --name privoxy buds/privoxy
 ```
 
 ### changelog
