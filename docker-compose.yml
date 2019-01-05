@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  squid:
+    image: buds/squid
+    build: 
+      context: squid
+    configs:
+      - source: squid_config
+        target: /etc/squid/squid.conf
+    deploy:
+      mode: global
+      replicas: 1
+      restart_policy:
+        condition: any
+    ports:
+      - "3128"
+    volumes:
+      - data-volume:/var/cache/squid
+
+  shadowsocks:
+    image: buds/shadowsocks
+    build:
+      context: shadowsocks
+
+  privoxy:
+    image: buds/privoxy
+    build:
+      context: privoxy
+
+  redis:
+    image: redis:alpine
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+
+  mysql:
+    image: mysql:5.7
+    networks:
+      new:
+        aliases:
+          - database
+      legacy:
+        aliases:
+          - mysql
+
+networks:
+  frontend:
+  backend:
+
+volumes:
+  data-volume:
+  db-volume:
+
+configs:
+  squid_config:
+    file: ./squid/squid.conf
