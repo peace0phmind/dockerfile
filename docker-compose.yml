@@ -50,6 +50,7 @@ services:
 networks:
   frontend:
   backend:
+    name: backend
 
 volumes:
   data-volume:
