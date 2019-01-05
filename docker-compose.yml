@@ -5,6 +5,7 @@ services:
     image: buds/squid
     build: 
       context: squid
+    container_name: squid
     configs:
       - source: squid_config
         target: /etc/squid/squid.conf
@@ -13,8 +14,10 @@ services:
       replicas: 1
       restart_policy:
         condition: any
+    networks:
+      backend:
     ports:
-      - "3128"
+      - "3128:3128"
     volumes:
       - data-volume:/var/cache/squid
 
