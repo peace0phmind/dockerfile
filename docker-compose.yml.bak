@@ -1,0 +1,76 @@
+version: "3"
+
+services:
+  squid:
+    image: buds/squid
+    build: 
+      context: squid
+    container_name: squid
+    configs:
+      - source: squid_config
+        target: /etc/squid/squid.conf
+    deploy:
+      mode: global
+      replicas: 1
+      restart_policy:
+        condition: any
+    networks:
+      backend:
+    ports:
+      - "3128:3128"
+    volumes:
+      - data-volume:/var/cache/squid
+
+  shadowsocks:
+    image: buds/shadowsocks
+    build:
+      context: shadowsocks
+
+  privoxy:
+    image: buds/privoxy
+    build:
+      context: privoxy
+
+  redis:
+    image: redis:alpine
+    deploy:
+      resources:
+        limits:
+          cpus: '0.50'
+          memory: 50M
+        reservations:
+          cpus: '0.25'
+          memory: 20M
+
+  mysql:
+    image: mysql:5.7
+    networks:
+      backend:
+
+
+  v2ray:
+    image: v2fly/v2fly-core
+    container_name: v2ray
+    command: v2ray -config=/etc/v2ray/config.json
+    networks:
+      backend:
+    ports:
+      - "10808:10808"
+      - "8128:8128"
+    volumes:
+      - "${HOME}/.settings/v2ray.json:/etc/v2ray/config.json"
+
+
+networks:
+  frontend:
+  backend:
+    name: backend
+
+volumes:
+  data-volume:
+  db-volume:
+
+configs:
+  squid_config:
+    file: ./squid/squid.conf
+
